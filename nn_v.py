@@ -10,8 +10,8 @@ from sklearn.model_selection import train_test_split
 
 matplotlib.use('TkAgg')
 
-df1 = pd.read_csv("dataset2/student-mat.csv", delimiter=";")
-df2 = pd.read_csv("dataset2/student-por.csv", delimiter=";")
+df1 = pd.read_csv("datasets/student-mat.csv", delimiter=";")
+df2 = pd.read_csv("datasets/student-por.csv", delimiter=";")
 
 df = pd.concat([df1, df2])
 
@@ -81,14 +81,14 @@ X_test = test_numpy[:, :-1]
 y_test = test_numpy[:, -1]
 
 # Train Data
-train_data = pd.read_csv("data/train.csv")
+"""train_data = pd.read_csv("data/train.csv")
 # Make 'genre' value numeric
 train_data["genre"] = train_data['genre'].map({'action': 0,
                                                'comedy': 1,
                                                'documentary': 2,
                                                'drama': 3,
                                                'horror': 4,
-                                               'thriller': 5}).astype(int)
+                                               'thriller': 5}).astype(int)"""
 # To get data
 """X_train = train_data.drop(["genre"], axis=1).values
 y_train = train_data["genre"].values"""
@@ -156,13 +156,13 @@ class NeuralNetworkClassificationModel(nn.Module):
     def forward(self, x):
         out = self.relu(self.input_layer(x))
         for layer in self.hidden_layers:
-            out = self.sigmoid(layer(out))
-            out = self.dropout(out)
+            out = self.relu(layer(out))
+            # out = self.dropout(out)
         out = self.output_layer(out)
         return out
 
 
-input_dim = 300
+input_dim = 20
 output_dim = 1
 num_hidden_layers = 1
 hidden_size = 64
