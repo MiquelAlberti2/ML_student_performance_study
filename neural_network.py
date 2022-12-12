@@ -11,7 +11,6 @@ import numpy as np
 import warnings
 
 
-
 class Neural_Network():
     def __init__(self, X_train, y_train):
         # Make NN
