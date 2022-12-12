@@ -3,11 +3,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from linear_regression import Linear_Regression
-from neural_network import Network_Manager
+from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.model_selection import train_test_split, cross_val_score
+#from neural_network import Network_Manager
+
+def oneHotEncode(df,colNames):
+    for col in colNames:
+        if( df[col].dtype == np.dtype('object')):
+            dummies = pd.get_dummies(df[col],prefix=col)
+            df = pd.concat([df,dummies],axis=1)
+
+            #drop the encoded column
+            df.drop([col],axis = 1 , inplace=True)
+    return df
+
 
 # loading files
-df1 = pd.read_csv("dataset2/student-mat.csv", delimiter=";")
-df2 = pd.read_csv("dataset2/student-por.csv", delimiter=";")
+df1 = pd.read_csv("datasets/student-mat.csv", delimiter=";")
+df2 = pd.read_csv("datasets/student-por.csv", delimiter=";")
 
 df = pd.concat([df1, df2])
 ###############
@@ -33,9 +46,13 @@ print(df['Mjob'].value_counts())
 # CLEAN DATASET
 ###############
 
-col_to_del = ['Mjob', 'Fjob', 'school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery', 'Dalc', 'Walc', 'G1', 'G2']
+col_to_del = ['Fjob', 'Mjob','school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery', 'Dalc', 'Walc', 'G1', 'G2']
 
 df.drop(columns=col_to_del, inplace = True, axis=1)
+
+df_y = df.pop("G3")
+
+#df = oneHotEncode(df, ['Fjob', 'Mjob'])
 
 df['sex'] = df['sex'].map({'F':0,
                             'M':1,
@@ -92,24 +109,32 @@ df['romantic'] = df['romantic'].map({'no':0,
 ###############
 # LINEAR REGRESSION
 ###############
+print(df.head(5))
 
-numpy_arr = df.to_numpy()
-x_list = numpy_arr[:,:-1]
-y_list = numpy_arr[:,-1]
+all_x_array = df.to_numpy()
+all_y_array = df_y.to_numpy()
 
-print('\nNumpy Array\n----------\n', numpy_arr, len(numpy_arr), len(numpy_arr[0]))
 
-l = Linear_Regression(x_list, y_list)
+#print('\nNumpy Array\n----------\n', numpy_arr, len(numpy_arr), len(numpy_arr[0]))
+
+
+
+# Dividing the data into training and testing set
+X_train, X_test, y_train, y_test = train_test_split(all_x_array, all_y_array, test_size = 0.2) 
+
+param = [i/4 for i in range(15)]
+print(param)
+l = Linear_Regression(X_train, y_train, param)
 l.plot_results()
 
-print(l.predictionError(x_list, y_list))
+print(l.predictionError(X_test, y_test))
 
 ###############
 # NEURAL NETWORK
 ###############
-num_classes = 6
+"""num_classes = 6
 num_features = 300
 
 structure = [num_features, 64, num_classes]
 
-model = Network_Manager(structure)
+model = Network_Manager(structure)"""
