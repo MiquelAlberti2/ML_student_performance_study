@@ -19,16 +19,19 @@ class Neural_Network:
         # Input layer of size X_train.shape[1] (number of features)
         # the first hidden layer has 64 neurons, 
         self.NN_model.add(Dense(64, kernel_initializer='normal', input_dim=X_train.shape[1], activation='relu'))
-        self.NN_model.add(Dense(64, kernel_initializer='normal', activation='relu'))
+        #self.NN_model.add(Dense(32, kernel_initializer='normal', activation='relu'))
 
         # Output Layer, with one node
-        self.NN_model.add(Dense(1, kernel_initializer='normal', activation='linear'))
+        self.NN_model.add(Dense(1, kernel_initializer='normal', activation='relu'))
 
         # Compile Network
         self.NN_model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['mean_absolute_error'])
         self.NN_model.summary()
 
         self.NN_model.fit(X_train, y_train, epochs=500, verbose=0, batch_size=32, validation_split=0.2)
+
+        print("See results with training data")
+        self.plot_results(X_train, y_train)
 
     def plot_results(self, X_test, y_test):
         # Evaluate the model on the test data using `evaluate`
