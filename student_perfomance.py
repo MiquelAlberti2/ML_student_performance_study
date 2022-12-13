@@ -2,10 +2,37 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from linear_regression import Linear_Regression
 from neural_network import Neural_Network
 from stats_analysis import Statistics
+
+from scipy.stats import norm
+import statistics
+
+
+
+def plot_gauss_distribution(values):
+    
+    # Fit a normal distribution to
+    # the data:
+    # mean and standard deviation
+    mu, std = norm.fit(values) 
+    
+    # Plot the histogram.
+    plt.hist(values, bins=25, density=True, alpha=0.6, color='b')
+    
+    # Plot the PDF.
+    xmin, xmax = plt.xlim()
+    x = np.linspace(xmin, xmax, 100)
+    p = norm.pdf(x, mu, std)
+    
+    plt.plot(x, p, 'k', linewidth=2)
+    title = "Fit Values: {:.2f} and {:.2f}".format(mu, std)
+    plt.title(title)
+    
+    plt.show()
 
 
 def oneHotEncode(df, colNames):
@@ -24,6 +51,11 @@ df1 = pd.read_csv("datasets/student-mat.csv", delimiter=";")
 df2 = pd.read_csv("datasets/student-por.csv", delimiter=";")
 
 df = pd.concat([df1, df2])
+	
+#plot_gauss_distribution(df['G3'])
+#plot_gauss_distribution(df1['G3'])
+#plot_gauss_distribution(df2['G3'])
+
 ###############
 # DATASET VISUALIZATION
 ###############
@@ -44,10 +76,10 @@ print(len(df))
 # CLEAN DATASET
 ###############
 
-col_to_del = ['school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery', 'Dalc', 'Walc']
+col_to_del = ['Fjob', 'Mjob','G1', 'G2','school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery', 'Dalc', 'Walc']
 df.drop(columns=col_to_del, inplace=True, axis=1)
 
-df = oneHotEncode(df, ['Fjob', 'Mjob'])
+#df = oneHotEncode(df, ['Fjob', 'Mjob'])
 
 df['sex'] = df['sex'].map({'F': 0,
                            'M': 1,
@@ -104,7 +136,13 @@ all_y_array = df_y.to_numpy()
 # Dividing the data into training and testing set
 X_train, X_test, y_train, y_test = train_test_split(all_x_array, all_y_array, test_size=0.2)
 
-# X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2)
+# finally, we normalize our training data
+#scaler = StandardScaler()
+scaler = MinMaxScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+
 
 ###############
 # LINEAR REGRESSION
@@ -115,10 +153,13 @@ print("\nLINEAR REGRESSION:")
 reg_param = [i / 4 for i in range(15)]
 
 l = Linear_Regression(X_train, y_train, reg_param)
-i_big_coef, i_small_coef = l.plot_results()
+i_big_coef, i_big_coef2, i_small_coef, i_small_coef2 = l.plot_results()
 
 print(f'Index {i_big_coef} corresponds to the feature {df.columns[i_big_coef]}')
+print(f'Index {i_big_coef2} corresponds to the feature {df.columns[i_big_coef2]}')
 print(f'Index {i_small_coef} corresponds to the feature {df.columns[i_small_coef]}')
+print(f'Index {i_small_coef2} corresponds to the feature {df.columns[i_small_coef2]}')
+
 
 print('Mean error committed: ', l.predictionError(X_test, y_test))
 

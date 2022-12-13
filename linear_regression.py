@@ -103,18 +103,39 @@ class Linear_Regression:
         print(self.theta)
         biggest_theta = -20
         smallest_theta = 0
+
+        biggest_theta2 = -20 #second highest coef
+        smallest_theta2 = 0 #second smallest coef
+
         index_b = None
+        index_b2 = None
         index_s = None
+        index_s2 = None
 
         # we exclude the offset
         for i in range(len(self.theta)-1):
             if self.theta[i] > biggest_theta:
+                biggest_theta2 = biggest_theta
                 biggest_theta = self.theta[i]
+                index_b2 = index_b
                 index_b = i
-            if self.theta[i] < smallest_theta:
-                smallest_theta = self.theta[i]
-                index_s = i
-        print(f'The biggest coefficient is {biggest_theta} which corresponds to the feature {index_b}')
-        print(f'The smallest coefficient is {smallest_theta} which corresponds to the feature {index_s}')
+            elif self.theta[i] > biggest_theta2:
+                biggest_theta2 = self.theta[i]
+                index_b2 = i
 
-        return index_b, index_s
+            if self.theta[i] < smallest_theta:
+                smallest_theta2 = smallest_theta
+                smallest_theta = self.theta[i]
+                index_s2 = index_s
+                index_s = i
+            elif self.theta[i] < smallest_theta2:
+                smallest_theta2 = self.theta[i]
+                index_s2 = i
+
+        print(f'The biggest coefficient is {biggest_theta} which corresponds to the feature {index_b}')
+        print(f'The second biggest coefficient is {biggest_theta2} which corresponds to the feature {index_b2}')
+        print(f'The smallest coefficient is {smallest_theta} which corresponds to the feature {index_s}')
+        print(f'The second smallest coefficient is {smallest_theta2} which corresponds to the feature {index_s2}')
+
+
+        return index_b, index_b2, index_s, index_s2
