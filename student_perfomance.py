@@ -124,7 +124,7 @@ stat.plot_study_time(), stat.plot_failures()
 # Plotting the correlation between the features
 stat.show_corr()
 # Making the linear regression model
-features = df.columns.tolist()
+features = df_plot.columns.tolist()
 features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 # Show how wanting a higher level of edu and mother's education affects a lot
@@ -172,5 +172,23 @@ print('Mean error committed: ', l.predictionError(X_test, y_test))
 ###############
 print("\nNEURAL NETWORK:")
 
-model = Neural_Network(X_train, y_train)
-model.plot_results(X_test, y_test)
+# we run the NN for different settings
+settings = [[16],[16,16],[32],[32,32],[64],[64,64],[128],[128, 128]]
+
+x_absis = [i for i in range(len(settings))]
+acc_tr_list = []
+acc_tst_list = []
+
+for setting in settings:
+
+    print('trying structure with hidden layers: ', setting)
+    model = Neural_Network(X_train, y_train, setting)
+    acc_tr_list.append(model.get_acc(X_train, y_train))
+    acc_tst_list.append(model.get_acc(X_test, y_test))
+
+plt.plot(x_absis, acc_tr_list, '-or')
+plt.plot(x_absis, acc_tst_list, '-ob')
+
+plt.show()
+
+
