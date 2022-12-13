@@ -26,7 +26,7 @@ class Statistics:
     def plot_failures(self):
         plt.figure(figsize=(10, 5))
 
-        plt.title("Grades based on study time")
+        plt.title("Grades based on failures")
         sns.regplot(x="failures", y="G3", data=self.df, color="red", label="G3: Final Period Grades",
                     scatter=False, ci=None)
         plt.xlabel("Failures")
@@ -39,6 +39,11 @@ class Statistics:
         grade = self.df['G3']
         sns.barplot(x=self.df['Medu'], y=grade, hue=self.df['sex'], capsize=.2).set(title='Mother Education and '
                                                                                           'Final Grades')
+        plt.show()
+
+    def show_studytime(self):
+        grade = self.df['G3']
+        sns.barplot(x=self.df['studytime'], y=grade, capsize=.2).set(title='Study Time and Final Grades')
         plt.show()
 
     def show_higher(self):
