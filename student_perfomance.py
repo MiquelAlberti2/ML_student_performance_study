@@ -87,10 +87,8 @@ df['romantic'] = df['romantic'].map({'no': 0,
 
 stat = Statistics(df)
 stat.plot_study_time(), stat.show_corr()
-features = ["sex", "age", "address", "famsize", "Pstatus", "Medu", "Fedu", "traveltime", "studytime", "failures", "paid"
-            , "activities", "higher", "internet", "romantic", "famrel", "freetime", "goout", "health", "absences", "G1"
-            , "G2", "Fjob_at_home", "Fjob_health", "Fjob_other", "Fjob_services", "Fjob_teacher", "Mjob_at_home",
-            "Mjob_health", "Mjob_other", "Mjob_services", "Mjob_teacher"]
+features = df.columns.tolist()
+features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 
 df_y = df.pop("G3")
@@ -117,9 +115,12 @@ print("\nLINEAR REGRESSION:")
 reg_param = [i / 4 for i in range(15)]
 
 l = Linear_Regression(X_train, y_train, reg_param)
-l.plot_results()
+i_big_coef, i_small_coef = l.plot_results()
 
-print(l.predictionError(X_test, y_test))
+print(f'Index {i_big_coef} corresponds to the feature {df.columns[i_big_coef]}')
+print(f'Index {i_small_coef} corresponds to the feature {df.columns[i_small_coef]}')
+
+print('Mean error committed: ', l.predictionError(X_test, y_test))
 
 ###############
 # NEURAL NETWORK

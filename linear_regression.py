@@ -107,12 +107,14 @@ class Linear_Regression:
         index_s = None
 
         # we exclude the offset
-        for i in range(0, len(self.theta)):
+        for i in range(len(self.theta)-1):
             if self.theta[i] > biggest_theta:
                 biggest_theta = self.theta[i]
                 index_b = i
             if self.theta[i] < smallest_theta:
                 smallest_theta = self.theta[i]
                 index_s = i
-        print(f'The biggest coefficient is {biggest_theta} which corresponds to the feature {index_b - 1}')
+        print(f'The biggest coefficient is {biggest_theta} which corresponds to the feature {index_b}')
         print(f'The smallest coefficient is {smallest_theta} which corresponds to the feature {index_s}')
+
+        return index_b, index_s
