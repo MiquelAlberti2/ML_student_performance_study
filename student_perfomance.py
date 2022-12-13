@@ -75,7 +75,6 @@ print(len(df))
 ###############
 
 col_to_del = ['Fjob', 'Mjob', 'G1', 'G2', 'school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery']
-df.drop(columns=col_to_del, inplace=True, axis=1)
 
 # df = oneHotEncode(df, ['Fjob', 'Mjob'])
 
@@ -114,8 +113,12 @@ df['activities'] = df['activities'].map({'no': 0,
 df['romantic'] = df['romantic'].map({'no': 0,
                                      'yes': 1,
                                      }).astype(int)
+df_plot = df.copy()
+col_to_del_copy = ['Fjob', 'Mjob', 'school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery']
+df.drop(columns=col_to_del, inplace=True, axis=1)
+df_plot.drop(columns=col_to_del_copy, inplace=True, axis=1)
 
-stat = Statistics(df)
+stat = Statistics(df_plot)
 # Plotting study time and failures in relation to final grade
 stat.plot_study_time(), stat.plot_failures()
 # Plotting the correlation between the features
@@ -125,7 +128,7 @@ features = df.columns.tolist()
 features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 # Show how wanting a higher level of edu and mother's education affects a lot
-stat.show_higher(), stat.show_medu()
+stat.show_higher(), stat.show_medu(), stat.show_studytime()
 
 df_y = df.pop("G3")
 
