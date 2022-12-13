@@ -12,32 +12,30 @@ from scipy.stats import norm
 import statistics
 
 
-
 def plot_gauss_distribution(values):
-    
     # Fit a normal distribution to
     # the data:
     # mean and standard deviation
-    mu, std = norm.fit(values) 
-    
+    mu, std = norm.fit(values)
+
     # Plot the histogram.
     plt.hist(values, bins=25, density=True, alpha=0.6, color='b')
-    
+
     # Plot the PDF.
     xmin, xmax = plt.xlim()
     x = np.linspace(xmin, xmax, 100)
     p = norm.pdf(x, mu, std)
-    
+
     plt.plot(x, p, 'k', linewidth=2)
     title = "Fit Values: {:.2f} and {:.2f}".format(mu, std)
     plt.title(title)
-    
+
     plt.show()
 
 
 def oneHotEncode(df, colNames):
     for col in colNames:
-        if (df[col].dtype == np.dtype('object')):
+        if df[col].dtype == np.dtype('object'):
             dummies = pd.get_dummies(df[col], prefix=col)
             df = pd.concat([df, dummies], axis=1)
 
@@ -51,10 +49,10 @@ df1 = pd.read_csv("datasets/student-mat.csv", delimiter=";")
 df2 = pd.read_csv("datasets/student-por.csv", delimiter=";")
 
 df = pd.concat([df1, df2])
-	
-#plot_gauss_distribution(df['G3'])
-#plot_gauss_distribution(df1['G3'])
-#plot_gauss_distribution(df2['G3'])
+
+# plot_gauss_distribution(df['G3'])
+# plot_gauss_distribution(df1['G3'])
+# plot_gauss_distribution(df2['G3'])
 
 ###############
 # DATASET VISUALIZATION
@@ -76,10 +74,10 @@ print(len(df))
 # CLEAN DATASET
 ###############
 
-col_to_del = ['Fjob', 'Mjob','G1', 'G2','school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery', 'Dalc', 'Walc']
+col_to_del = ['Fjob', 'Mjob', 'G1', 'G2', 'school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery']
 df.drop(columns=col_to_del, inplace=True, axis=1)
 
-#df = oneHotEncode(df, ['Fjob', 'Mjob'])
+# df = oneHotEncode(df, ['Fjob', 'Mjob'])
 
 df['sex'] = df['sex'].map({'F': 0,
                            'M': 1,
@@ -118,10 +116,16 @@ df['romantic'] = df['romantic'].map({'no': 0,
                                      }).astype(int)
 
 stat = Statistics(df)
-stat.plot_study_time(), stat.show_corr()
+# Plotting study time and failures in relation to final grade
+stat.plot_study_time(), stat.plot_failures()
+# Plotting the correlation between the features
+stat.show_corr()
+# Making the linear regression model
 features = df.columns.tolist()
 features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
+# Show how wanting a higher level of edu and mother's education affects a lot
+stat.show_higher(), stat.show_medu()
 
 df_y = df.pop("G3")
 
@@ -137,12 +141,10 @@ all_y_array = df_y.to_numpy()
 X_train, X_test, y_train, y_test = train_test_split(all_x_array, all_y_array, test_size=0.2)
 
 # finally, we normalize our training data
-#scaler = StandardScaler()
+# scaler = StandardScaler()
 scaler = MinMaxScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
-
-
 
 ###############
 # LINEAR REGRESSION
@@ -159,7 +161,6 @@ print(f'Index {i_big_coef} corresponds to the feature {df.columns[i_big_coef]}')
 print(f'Index {i_big_coef2} corresponds to the feature {df.columns[i_big_coef2]}')
 print(f'Index {i_small_coef} corresponds to the feature {df.columns[i_small_coef]}')
 print(f'Index {i_small_coef2} corresponds to the feature {df.columns[i_small_coef2]}')
-
 
 print('Mean error committed: ', l.predictionError(X_test, y_test))
 

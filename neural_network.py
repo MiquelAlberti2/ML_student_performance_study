@@ -11,7 +11,7 @@ import numpy as np
 import warnings
 
 
-class Neural_Network():
+class Neural_Network:
     def __init__(self, X_train, y_train):
         # Make NN
         self.NN_model = Sequential()
@@ -28,10 +28,9 @@ class Neural_Network():
         self.NN_model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['mean_absolute_error'])
         self.NN_model.summary()
 
-        self.NN_model.fit(X_train,y_train, epochs=500, verbose = 0, batch_size=32, validation_split = 0.2)
+        self.NN_model.fit(X_train, y_train, epochs=500, verbose=0, batch_size=32, validation_split=0.2)
 
     def plot_results(self, X_test, y_test):
-
         # Evaluate the model on the test data using `evaluate`
         print("Evaluate on test data")
         results, acc = self.NN_model.evaluate(X_test, y_test)
@@ -43,9 +42,8 @@ class Neural_Network():
 
         error = 0
         for e in differences:
-            error+=abs(e)
+            error += abs(e)
 
         mean_e = error / len(differences)
 
         print('Mean error: ', mean_e)
-        

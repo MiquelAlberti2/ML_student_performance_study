@@ -35,10 +35,24 @@ class Statistics:
         plt.legend(loc="upper right")
         plt.show()
 
+    def show_medu(self):
+        grade = self.df['G3']
+        sns.barplot(x=self.df['Medu'], y=grade, hue=self.df['sex'], capsize=.2).set(title='Mother Education and '
+                                                                                          'Final Grades')
+        plt.show()
+
+    def show_higher(self):
+        grade = self.df['G3']
+        sns.barplot(x=self.df['higher'], y=grade, hue=self.df['sex'], capsize=.2).set(title='Higher Education and '
+                                                                                            'Final Grades')
+        plt.show()
+
     def show_corr(self):
-        heatmap = plt.matshow(self.df.corr())
-        print(self.df.corr())
-        plt.colorbar(heatmap)
+        corr = self.df.corr()
+        plt.figure(figsize=(15, 8))
+        sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns, annot=True,
+                    cmap="Spectral")  # visualize correlation matrix
+        plt.title('Correlation Heatmap')
         plt.show()
 
     # Function to create Linear Models with Scikit-Learn
@@ -78,4 +92,3 @@ class Statistics:
         print("The coeficients (betas) are: ", lm.coef_)
 
         return lm_results.head()
-
