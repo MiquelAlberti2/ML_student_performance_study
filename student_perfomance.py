@@ -135,7 +135,7 @@ features = df.columns.tolist()
 features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 # Show how wanting a higher level of edu and mother's education affects a lot
-stat.show_higher(), stat.show_medu(), stat.show_studytime()
+stat.show_higher(), stat.show_medu(), stat.show_studytime(), stat.show_failures()
 
 
 
