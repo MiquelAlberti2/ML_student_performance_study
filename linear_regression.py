@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split, cross_val_score
 
 
-class Linear_Regression:
+class My_Linear_Regression:
     def __init__(self, X_train, y_train, reg_params):
         # we do k-fold cross validation to choose the best parameter
         k = 5
