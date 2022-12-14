@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
+from sklearn.metrics import mean_absolute_error 
 
 
 from linear_regression import My_Linear_Regression
@@ -63,7 +64,7 @@ df = pd.concat([df1, df2])
 # DATASET VISUALIZATION
 ###############
 
-"""print("\n------------Reading file------------")
+print("\n------------Reading file------------")
 # Read the CSV input file
 
 print("\nGeneral information of the dataset:")
@@ -73,7 +74,7 @@ print("\nFirst 5 rows, to get an idea of how is the dataset:")
 print(df.head(5))
 
 print("\nNumber of samples:")
-print(len(df))"""
+print(len(df))
 
 ###############
 # CLEAN DATASET
@@ -124,7 +125,7 @@ col_to_del_copy = ['Fjob', 'Mjob', 'school', 'reason', 'guardian', 'schoolsup', 
 df.drop(columns=col_to_del, inplace=True, axis=1)
 df_plot.drop(columns=col_to_del_copy, inplace=True, axis=1)
 
-"""stat = Statistics(df_plot)
+stat = Statistics(df_plot)
 # Plotting study time and failures in relation to final grade
 stat.plot_study_time(), stat.plot_failures()
 # Plotting the correlation between the features
@@ -135,7 +136,7 @@ features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 # Show how wanting a higher level of edu and mother's education affects a lot
 stat.show_higher(), stat.show_medu(), stat.show_studytime()
-"""
+
 
 
 df_y = df.pop("G3")
@@ -178,27 +179,25 @@ print('Mean error committed: ', l.predictionError(X_test, y_test))
 ###############
 # LINEAR REGRESSION WITH BASIS FUNCTION EXPANSION
 ###############
-X_study = df['studytime'].to_numpy()
+print("\nPOLYNOMIAL REGRESSION:")
 
-X_study_tr, X_study_tst, y_study_tr, y_study_tst = train_test_split(X_study, all_y_array, test_size=0.2)
 
-poly = PolynomialFeatures(degree = 4, include_bias=False)
-poly_for_reg = poly.fit_transform(X_study_tr.reshape(-1, 1))
+poly = PolynomialFeatures(degree = 2)
+poly_for_reg = poly.fit_transform(X_train)
+poly.fit(poly_for_reg, y_train)
 
+# Use sklearn linear regression as a base
 model_reg = LinearRegression()
-model_reg.fit(poly_for_reg, y_study_tr)
+model_reg.fit(poly_for_reg, y_train)
 
-# Visualising the Polynomial Regression results
-#plot the real point we want to fit
-plt.scatter(X_study, all_y_array, color = 'blue')
-#plot the predicted polinomial
-plt.plot(X_study_tr, model_reg.predict(poly_for_reg),
-         color = 'red',label='Polynomial Regression')
-plt.title('Polynomial Regression')
+# prediction of training data
+y_pred_tr = model_reg.predict(poly_for_reg)
+# prediction of testing data
+y_pred_tst = model_reg.predict(poly.fit_transform(X_test))
 
-plt.legend()
-  
-plt.show()
+print("\nError with traingin data: ", mean_absolute_error(y_train, y_pred_tr))
+print("Error with testing data: ", mean_absolute_error(y_test, y_pred_tst))
+
 
 ###############
 # NEURAL NETWORK
