@@ -234,7 +234,7 @@ NUM_OUTPUTS = 1
 NUM_FEATURES = 22
 
 # Let's also try our NN developed using pytorch
-setting = [NUM_FEATURES, 32, NUM_OUTPUTS]
+setting = [NUM_FEATURES, 32, 32, NUM_OUTPUTS]
 
 net = My_Network(setting, X_train, X_val, y_train, y_val)
 
