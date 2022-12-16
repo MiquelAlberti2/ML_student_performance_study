@@ -133,11 +133,11 @@ stat.plot_study_time(), stat.plot_failures()
 # Plotting the correlation between the features
 stat.show_corr()
 # Making the linear regression model
-features = df_plot.columns.tolist()
+features = df.columns.tolist()
 features.remove('G3')
 print(stat.linear_model_creator(features, "G3"))
 # Show how wanting a higher level of edu and mother's education affects a lot
-stat.show_higher(), stat.show_medu(), stat.show_studytime()
+stat.show_higher(), stat.show_medu(), stat.show_studytime(), stat.show_failures()
 
 
 df_y = df.pop("G3")

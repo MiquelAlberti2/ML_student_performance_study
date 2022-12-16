@@ -52,6 +52,12 @@ class Statistics:
                                                                                             'Final Grades')
         plt.show()
 
+    def show_failures(self):
+        grade = self.df['G3']
+        sns.barplot(x=grade, y=self.df['failures'], hue=self.df['sex'], capsize=.2).set(title='Failures and '
+                                                                                              'Final Grades')
+        plt.show()
+
     def show_corr(self):
         corr = self.df.corr()
         plt.figure(figsize=(15, 8))

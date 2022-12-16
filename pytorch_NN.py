@@ -108,8 +108,8 @@ class My_Network():
                 best_model = copy.deepcopy(model)
 
 
-        plt.plot(tr_loss_list, label = 'training loss per epoch')
-        plt.plot(val_loss_list, label = 'validation loss per epoch')
+        plt.plot(tr_loss_list, label = 'Training Loss per Epoch')
+        plt.plot(val_loss_list, label = 'Validation Loss per Epoch')
         plt.legend()
         plt.show()
 
