@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
-from sklearn.pipeline import make_pipeline
 from sklearn.metrics import mean_absolute_error 
 
 
@@ -15,7 +14,6 @@ from pytorch_NN import My_Network
 from stats_analysis import Statistics
 
 from scipy.stats import norm
-import statistics
 
 
 def plot_gauss_distribution(values):
@@ -40,6 +38,7 @@ def plot_gauss_distribution(values):
 
 
 def oneHotEncode(df, colNames):
+    # at the end we are not using oneHotEncoding, but we could in the future
     for col in colNames:
         if df[col].dtype == np.dtype('object'):
             dummies = pd.get_dummies(df[col], prefix=col)
@@ -63,25 +62,28 @@ df = pd.concat([df1, df2])
 ###############
 # DATASET VISUALIZATION
 ###############
+# uncomment to see some infomation of the dataset
 
-print("\n------------Reading file------------")
+# print("\n------------Reading file------------")
 # Read the CSV input file
 
-print("\nGeneral information of the dataset:")
-print(df.info())
+# print("\nGeneral information of the dataset:")
+# print(df.info())
 
-print("\nFirst 5 rows, to get an idea of how is the dataset:")
-print(df.head(5))
+# print("\nFirst 5 rows, to get an idea of how is the dataset:")
+# print(df.head(5))
 
-print("\nNumber of samples:")
-print(len(df))
+# print("\nNumber of samples:")
+# print(len(df))
 
 ###############
 # CLEAN DATASET
 ###############
 
+# Features that we are not using
 col_to_del = ['Fjob', 'Mjob', 'G1', 'G2', 'school', 'reason', 'guardian', 'schoolsup', 'famsup', 'nursery']
 
+# we are not using these features at the end, but we could do so by applying oneHotEncoding
 # df = oneHotEncode(df, ['Fjob', 'Mjob'])
 
 df['sex'] = df['sex'].map({'F': 0,
@@ -138,11 +140,8 @@ print(stat.linear_model_creator(features, "G3"))
 stat.show_higher(), stat.show_medu(), stat.show_studytime()
 
 
-
 df_y = df.pop("G3")
 
-print("Cleaned features: \n", df.head(5))
-print("Cleaned y values: \n", df_y.head(5))
 print("Final Features:")
 print(df.info())
 
@@ -162,6 +161,7 @@ X_test = scaler.transform(X_test)
 # LINEAR REGRESSION
 ###############
 print("\nLINEAR REGRESSION:")
+print(" -------------------------------------------------------- ")
 
 # Regularization terms that we want to try
 reg_param = [i / 4 for i in range(15)]
@@ -180,6 +180,7 @@ print('Mean error committed: ', l.predictionError(X_test, y_test))
 # LINEAR REGRESSION WITH BASIS FUNCTION EXPANSION
 ###############
 print("\nPOLYNOMIAL REGRESSION:")
+print(" -------------------------------------------------------- ")
 
 
 poly = PolynomialFeatures(degree = 2)
@@ -203,6 +204,7 @@ print("Error with testing data: ", mean_absolute_error(y_test, y_pred_tst))
 # NEURAL NETWORK
 ###############
 print("\nNEURAL NETWORK:")
+print(" -------------------------------------------------------- ")
 
 # split training data into training and validation
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2)
@@ -230,7 +232,6 @@ plt.show()
 
 NUM_OUTPUTS = 1
 NUM_FEATURES = 22
-
 
 # Let's also try our NN developed using pytorch
 setting = [NUM_FEATURES, 32, NUM_OUTPUTS]

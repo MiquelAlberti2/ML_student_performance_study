@@ -1,6 +1,4 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from sklearn.model_selection import train_test_split, cross_val_score
 
 
 class My_Linear_Regression:
@@ -50,7 +48,6 @@ class My_Linear_Regression:
 
             if error_param[param_index] < best_error:
                 best_error = error_param[param_index]
-                print("new best error", best_error)
                 best_param = reg_params[param_index]
 
         # Finally, we run regression on the entire dataset using the best param
