@@ -21,6 +21,7 @@ class My_Linear_Regression:
         error_param = [0] * len(reg_params)
 
         # decide the best parameter between the ones in the list
+        # (k-fold cross-validation)
         for param_index in range(len(reg_params)):
             for i in range(k):  # iterate through my partitions
                 X_val = partitions_X[i]
